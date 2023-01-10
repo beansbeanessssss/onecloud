@@ -6,6 +6,7 @@ import LogoutPage from '../pages/logout.vue'
 import OidcCallbackPage from '../pages/oidcCallback.vue'
 import ResolvePublicLinkPage from '../pages/resolvePublicLink.vue'
 import ResolvePrivateLinkPage from '../pages/resolvePrivateLink.vue'
+import EmbeddedLinkPage from '../pages/embeddedLink.vue'
 import { setupAuthGuard } from './setupAuthGuard'
 import { patchRouter } from './patchCleanPath'
 import VueRouter from 'vue-router'
@@ -88,6 +89,12 @@ export const router = patchRouter(
         name: 'account',
         component: Account,
         meta: { title: $gettext('Account'), authContext: 'user' }
+      },
+      {
+        path: '/e/:linkId',
+        name: 'embeddedLink',
+        component: EmbeddedLinkPage,
+        meta: { authContext: 'user' }
       }
     ]
   })

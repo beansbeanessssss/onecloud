@@ -36,7 +36,8 @@
             :variation="n.active ? 'inverse' : 'passive'"
           >
             <span class="icon-box">
-              <oc-icon :name="n.icon" />
+              <img v-if="n.iconUrl" :src="n.iconUrl" />
+              <oc-icon v-else :name="n.icon" />
             </span>
             <span v-text="$gettext(n.title)" />
             <oc-icon v-if="n.active" name="check" class="active-check" />
@@ -47,16 +48,18 @@
   </nav>
 </template>
 
-<script>
+<script lang="ts">
 import { clientService } from 'web-pkg/src/services'
 import { configurationManager } from 'web-pkg/src/configuration'
 import { mapGetters } from 'vuex'
 import { urlJoin } from 'web-client/src/utils'
+import { defineComponent, PropType } from '@vue/composition-api'
+import { Link } from '../../store/config'
 
-export default {
+export default defineComponent({
   props: {
     applicationsList: {
-      type: Array,
+      type: Array as PropType<Link[]>,
       required: false,
       default: () => []
     }
@@ -87,7 +90,7 @@ export default {
       return httpClient.post(url, { isDefault: false })
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>
