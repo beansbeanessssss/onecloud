@@ -223,7 +223,8 @@ export default defineComponent({
         const response = await client.groups.createGroup(group)
         this.toggleCreateGroupModal()
         this.showMessage({
-          title: this.$gettext('Group was created successfully')
+          title: this.$gettext('Group was created successfully'),
+          status: 'success'
         })
         this.groups.push({ ...response?.data, members: [] })
       } catch (error) {
@@ -242,7 +243,8 @@ export default defineComponent({
         Object.assign(group, editGroup)
 
         this.showMessage({
-          title: this.$gettext('Group was edited successfully')
+          title: this.$gettext('Group was edited successfully'),
+          status: 'success'
         })
       } catch (error) {
         console.error(error)

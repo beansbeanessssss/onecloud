@@ -1,27 +1,20 @@
 <template>
-  <div
-    class="oc-fade-in oc-flex oc-flex-wrap oc-notification-message oc-box-shadow-medium oc-rounded oc-p-m"
-    :class="classes"
+  <oc-alert
+    class="oc-fade-in oc-box-shadow-medium"
+    :closeable="true"
+    :has-icon="true"
+    :role="role"
+    :aria-live="ariaLive"
+    :variant="status"
   >
-    <div class="oc-flex oc-flex-wrap oc-flex-middle oc-flex-1" :role="role" :aria-live="ariaLive">
-      <div class="oc-flex oc-flex-middle">
-        <oc-icon :variation="iconVariation" name="information" fill-type="line" class="oc-mr-s" />
-        <div class="oc-notification-message-title">
-          {{ title }}
-        </div>
-      </div>
-      <div
-        v-if="message"
-        class="oc-text-muted oc-width-1-1 oc-notification-message-content oc-mt-s oc-pl-s oc-ml-l"
-      >
-        {{ message }}
-      </div>
-    </div>
-  </div>
+    {{ title }}
+    <template #message>
+      {{ message }}
+    </template>
+  </oc-alert>
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import OcIcon from '../OcIcon/OcIcon.vue'
 
 /**
  * Notifications are used to inform users about errors, warnings and as confirmations for their actions.
@@ -30,9 +23,6 @@ export default defineComponent({
   name: 'OcNotificationMessage',
   status: 'ready',
   release: '1.0.0',
-  components: {
-    OcIcon
-  },
   props: {
     /**
      * Notification messages are sub components of the oc-notifications component.
@@ -43,9 +33,9 @@ export default defineComponent({
     status: {
       type: String,
       required: false,
-      default: 'passive',
+      default: 'info',
       validator: (value: string) => {
-        return ['passive', 'primary', 'success', 'warning', 'danger'].includes(value)
+        return ['info', 'success', 'warning', 'danger'].includes(value)
       }
     },
     /**
@@ -113,15 +103,9 @@ export default defineComponent({
 
 <style lang="scss">
 .oc-notification-message {
-  background-color: var(--oc-color-background-default) !important;
-  cursor: pointer;
   margin-top: var(--oc-space-small);
   position: relative;
   word-break: break-word;
-
-  &-title {
-    font-size: 1.15rem;
-  }
 }
 </style>
 

@@ -449,7 +449,8 @@ export default defineComponent({
           }
         }
         await store.dispatch('showMessage', {
-          title: $gettext('Users were added to groups successfully')
+          title: $gettext('Users were added to groups successfully'),
+          status: 'success'
         })
         addToGroupsModalIsOpen.value = false
       } catch (e) {
@@ -493,7 +494,8 @@ export default defineComponent({
           }
         }
         await store.dispatch('showMessage', {
-          title: $gettext('Users were removed from groups successfully')
+          title: $gettext('Users were removed from groups successfully'),
+          status: 'success'
         })
         removeFromGroupsModalIsOpen.value = false
       } catch (e) {
@@ -624,7 +626,8 @@ export default defineComponent({
 
         this.toggleCreateUserModal()
         this.showMessage({
-          title: this.$gettext('User was created successfully')
+          title: this.$gettext('User was created successfully'),
+          status: 'success'
         })
       } catch (error) {
         console.error(error)
