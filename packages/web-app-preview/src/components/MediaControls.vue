@@ -1,35 +1,15 @@
 <template>
   <div
-    class="oc-position-medium oc-position-bottom-center preview-details"
+    class="oc-position-small oc-position-bottom-center preview-details"
     :class="{ lightbox: isFullScreenModeActivated }"
   >
     <div
       class="oc-background-brand oc-p-s oc-width-large oc-flex oc-flex-middle oc-flex-center oc-flex-around preview-controls-action-bar"
     >
-      <oc-button
-        v-oc-tooltip="previousDescription"
-        class="preview-controls-previous"
-        appearance="raw-inverse"
-        variation="brand"
-        :aria-label="previousDescription"
-        @click="$emit('togglePrevious')"
-      >
-        <oc-icon size="large" name="arrow-drop-left" variation="inherit" />
-      </oc-button>
       <p v-if="!isFolderLoading" class="oc-m-rm preview-controls-action-count">
         <span aria-hidden="true" v-text="ariaHiddenFileCount" />
         <span class="oc-invisible-sr" v-text="screenreaderFileCount" />
       </p>
-      <oc-button
-        v-oc-tooltip="nextDescription"
-        class="preview-controls-next"
-        appearance="raw-inverse"
-        variation="brand"
-        :aria-label="nextDescription"
-        @click="$emit('toggleNext')"
-      >
-        <oc-icon size="large" name="arrow-drop-right" variation="inherit" />
-      </oc-button>
       <div class="oc-flex">
         <oc-button
           v-oc-tooltip="
@@ -83,28 +63,22 @@
             <oc-icon fill-type="line" name="add-box" variation="inherit" />
           </oc-button>
         </div>
-        <div class="oc-ml-m">
-          <oc-button
-            v-oc-tooltip="imageRotateLeftDescription"
-            class="preview-controls-rotate-left"
-            appearance="raw-inverse"
-            variation="brand"
-            :aria-label="imageRotateLeftDescription"
-            @click="imageRotateLeft"
-          >
-            <oc-icon fill-type="line" name="anticlockwise" variation="inherit" />
-          </oc-button>
-          <oc-button
-            v-oc-tooltip="imageRotateRightDescription"
-            class="preview-controls-rotate-right"
-            appearance="raw-inverse"
-            variation="brand"
-            :aria-label="imageRotateRightDescription"
-            @click="imageRotateRight"
-          >
-            <oc-icon fill-type="line" name="clockwise" variation="inherit" />
-          </oc-button>
-        </div>
+      </div>
+      <div v-if="isImage" class="oc-flex">
+        <oc-button
+          v-oc-tooltip="isEditModeActivated ? viewModeDescription : editModeDescription"
+          class="preview-controls-fullscreen"
+          appearance="raw-inverse"
+          variation="brand"
+          :aria-label="isEditModeActivated ? viewModeDescription : editModeDescription"
+          @click="$emit('toggleEditMode')"
+        >
+          <oc-icon
+            fill-type="line"
+            :name="isEditModeActivated ? 'eye' : 'edit-2'"
+            variation="inherit"
+          />
+        </oc-button>
       </div>
     </div>
   </div>
@@ -129,6 +103,10 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
+    isEditModeActivated: {
+      type: Boolean,
+      default: false
+    },
     isFolderLoading: {
       type: Boolean,
       default: false
@@ -140,13 +118,9 @@ export default defineComponent({
     currentImageZoom: {
       type: Number,
       default: 1
-    },
-    currentImageRotation: {
-      type: Number,
-      default: 0
     }
   },
-  emits: ['setRotation', 'setZoom', 'toggleFullScreen', 'toggleNext', 'togglePrevious'],
+  emits: ['setZoom', 'toggleFullScreen', 'toggleEditMode'],
   setup(props, { emit }) {
     const { $gettext } = useGettext()
 
@@ -177,12 +151,6 @@ export default defineComponent({
       const maxZoomValue = calculateZoom(9, 1.25)
       emit('setZoom', Math.min(calculateZoom(props.currentImageZoom, 1.25), maxZoomValue))
     }
-    const imageRotateLeft = () => {
-      emit('setRotation', props.currentImageRotation === -270 ? 0 : props.currentImageRotation - 90)
-    }
-    const imageRotateRight = () => {
-      emit('setRotation', props.currentImageRotation === 270 ? 0 : props.currentImageRotation + 90)
-    }
 
     return {
       currentZoomDisplayValue,
@@ -190,23 +158,23 @@ export default defineComponent({
       ariaHiddenFileCount,
       enterFullScreenDescription: $gettext('Enter full screen mode'),
       exitFullScreenDescription: $gettext('Exit full screen mode'),
+      editModeDescription: $gettext('Enter Edit mode'),
+      viewModeDescription: $gettext('Enter View mode'),
       imageShrinkDescription: $gettext('Shrink the image'),
       imageZoomDescription: $gettext('Enlarge the image'),
       imageOriginalSizeDescription: $gettext('Show the image at its normal size'),
-      imageRotateLeftDescription: $gettext('Rotate the image 90 degrees to the left'),
-      imageRotateRightDescription: $gettext('Rotate the image 90 degrees to the right'),
-      previousDescription: $gettext('Show previous media file in folder'),
-      nextDescription: $gettext('Show next media file in folder'),
       imageShrink,
-      imageZoom,
-      imageRotateLeft,
-      imageRotateRight
+      imageZoom
     }
   }
 })
 </script>
-  
+
 <style lang="scss" scoped>
+.preview-details {
+  bottom: calc(22vh - 1rem);
+}
+
 .preview-details.lightbox {
   z-index: 1000;
   opacity: 0.9;
@@ -220,4 +188,3 @@ export default defineComponent({
   width: 42px;
 }
 </style>
-  
