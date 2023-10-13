@@ -284,7 +284,12 @@ const createDocumentFile = async (
   await Promise.all([
     page.waitForLoadState(),
     page.waitForURL('**/external/personal/**'),
-    page.waitForResponse((resp) => resp.status() === 200 && resp.request().method() === 'POST'),
+    page.waitForResponse(
+      (resp) =>
+        resp.status() === 200 &&
+        resp.request().method() === 'POST' &&
+        resp.url().includes('/app/open?file_id=')
+    ),
     page.locator(util.format(actionConfirmationButton, 'Create')).click()
   ])
   const editorMainFrame = await page.frameLocator(externalEditorIframe)
