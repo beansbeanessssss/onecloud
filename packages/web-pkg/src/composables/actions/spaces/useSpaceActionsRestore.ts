@@ -32,7 +32,7 @@ export const useSpaceActionsRestore = () => {
       client.drives
         .updateDrive(
           space.id.toString(),
-          { name: space.name },
+          {},
           {
             headers: {
               Restore: true
