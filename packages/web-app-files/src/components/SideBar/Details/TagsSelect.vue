@@ -2,6 +2,7 @@
   <oc-select
     ref="tagSelect"
     v-model="selectedTags"
+    :aria-label="$gettext('Add or edit tags')"
     class="tags-select"
     :multiple="true"
     :disabled="readonly"
